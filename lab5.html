@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+	<title> Lab 5 </title>
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+attribute vec4 myPosition;
+
+uniform mat4 Mx;
+uniform mat4 My;
+uniform mat4 Mz;
+uniform mat4 translation;
+uniform mat4 scaling;
+
+uniform mat4 Pp;
+uniform mat4 Po;
+
+attribute vec2 textureCoord;
+varying vec2 fTextureCoord;
+
+void main(){
+
+	fTextureCoord = textureCoord;
+	
+	vec4 vi = myPosition;
+	vec4 vf;
+	vf = (scaling * translation * Mz * My * Mx) * vi;
+	gl_Position = vf;
+	
+	fTextureCoord = textureCoord;
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+varying vec2 fTextureCoord;
+uniform sampler2D texMap0;
+//uniform sampler2D texMap1;
+
+//<img hidden src="./myimage.jpg" id="myImage"/>
+
+void main(){
+	vec4 color0 = texture2D(texMap0, fTextureCoord);
+	//vec4 color1 = texture2D(texMap1, fTextureCoord);
+	gl_FragColor.r = color0.r;
+	gl_FragColor.g = color0.g;
+	gl_FragColor.b = color0.b;
+	gl_FragColor.a = 1.0;
+}
+</script>
+
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="lab5.js"></script>
+</head>
+
+<body onload = "initGL()" onkeydown="keyPress(event)">
+    <canvas id="gl-canvas" width="512" height="512"></canvas><br/>
+    <img id="butterflyImg" hidden src="butterfly.jpg"/>
+</body>
+</html>
